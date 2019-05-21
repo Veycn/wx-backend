@@ -16,10 +16,10 @@ function queryTeamById(teamId, success){
   DBUtil.Query(sql, params, success)
 }
 
-function createTeam () {
-  let sql = ''
-  let params = []
-  DBUtil.Query(sql, params, success)
+function createTeam (teamInfo, callback) {
+  let sql = 'insert into team (name, members, number, leader, competition) values (?,?,?,?,?);'
+  let params = [...teamInfo]
+  DBUtil.Query(sql, params, callback)
 }
 
 function removeTeam(teamId){

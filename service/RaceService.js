@@ -3,11 +3,10 @@ const Util = require("../Utils")
 
 function queryAllRace(callback){
   RaceDao.queryAllRace(data => {
-    console.log(data)
     if(data.length){
-      callback({success: true, msg: 'Query OK!', data: data})
+      callback(Util.Write(true, data))
     }else {
-      callback({success: false, msg: "Query Faild!", data: null})
+      callback(Util.Write(false, null))
     }
   })
 }
@@ -34,7 +33,6 @@ function alterRaceInfo(id, newRaceInfo, callback){
 
 function queryRaceByType(type, callback){
   RaceDao.queryRaceByType(type, data => {
-    console.log(data)
     if(data.length){
       callback(Util.Write(true, data))
     } else {
@@ -45,7 +43,6 @@ function queryRaceByType(type, callback){
 
 function queryRaceByLevel(level, callback){
   RaceDao.queryRaceByLevel(level, data => {
-    console.log(data)
     if(data.length){
       callback(Util.Write(true, data))
     } else {
