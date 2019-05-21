@@ -51,11 +51,18 @@ function alterUserTags (id, tags, callback) {
   DBUtil.Query(sql, params, callback)
 }
 
+function setUserAvatar(id, imgUrl, callback){
+  let sql = "update users set `image` = ? where `id` = ?;"
+  let params = [imgUrl, id]
+  DBUtil.Query(sql, params, callback)
+}
+
 module.exports = {
   queryUserById,
   queryUserByAccount,
   queryUserByName,
   addUser,
   alterUserBaseInfo,
-  alterUserTags
+  alterUserTags,
+  setUserAvatar
 }

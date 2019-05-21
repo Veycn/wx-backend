@@ -55,4 +55,23 @@ router.post('/alterusertags', (req, res) => {
   })
 })
 
+// 设置用户的头像， 获取微信头像之后调用此接口存储 imgUrl
+router.post('/setuseravatar', (req, res) => {
+  let {id, imgUrl} = req.body
+  console.log(req.body)
+  User.setUserAvatar(id, imgUrl, data => {
+    console.log(data)
+  })
+})
+
+
+router.get("/test", (req, res) => {
+  let result = {success: true, code: 1, msg: 'request ok'}
+  res.writeHead(200)
+  res.write(JSON.stringify(result))
+  res.end()
+})
+
+
+
 module.exports = router

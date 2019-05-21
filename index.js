@@ -1,6 +1,7 @@
 const express = require("express")
 const bodyParser = require("body-parser")
 const user = require("./routes/user")
+const race = require("./routes/race")
 const app = express()
 
 app.use(bodyParser.json())        // 解析 json
@@ -11,6 +12,7 @@ app.get("/test", (req, res) => {
 })
 
 app.use('/user', user)
+app.use('/race', race)
 
 
 

@@ -66,6 +66,17 @@ function getUserInfo(userId, callback){
   public 
   获取其他人的信息（不包含敏感信息=>联系方式）
 */
+function setUserAvatar(id, imgUrl, callback){
+  UserDao.setUserAvatar(id, imgUrl, data => {
+    callback({success: true, msg: 'Query OK!', data: data})
+  }) 
+}
+
+/*
+  @params Number userId  用户Id
+  public 
+  获取其他人的信息（不包含敏感信息=>联系方式）
+*/
 function getOtherInfo(userId){
   
 }
@@ -117,7 +128,8 @@ module.exports = {
   login,
   getUserInfo,
   alterUserBaseInfo,
-  alterUserTags
+  alterUserTags,
+  setUserAvatar
 }
 
 

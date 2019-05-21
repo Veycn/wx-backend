@@ -17,7 +17,7 @@ function Query (sql, params, success){
     if(!err){
       success(res)
     } else {
-      throw new Error('Query Error!')
+      throw new Error('Query Error! ' + err)
     }
   })
   connection.end()
