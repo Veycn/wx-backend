@@ -11,8 +11,14 @@ function queryTeamByName(teamName, success){
 }
 
 function queryTeamById(teamId, success){
-  let sql = 'select * from team where teamId=?;'
+  let sql = 'select * from team where id=?;'
   let params = [teamId]
+  DBUtil.Query(sql, params, success)
+}
+
+function queryTeamMember (teamid, success) {
+  let sql = "select members, leader from team where id = ?;"
+  let params = [teamid]
   DBUtil.Query(sql, params, success)
 }
 
@@ -28,9 +34,9 @@ function removeTeam(teamId){
   DBUtil.Query(sql, params, success)
 }
 
-function addTeamMember (memberId, success) {
-  let sql = ''
-  let params = [memberId]
+function addTeamMember (teamid, members, success) {
+  let sql = "update team set members = ? where id = ?;"
+  let params = [members, teamid]
   DBUtil.Query(sql, params, success)
 }
 
@@ -43,6 +49,7 @@ function removeTeamMember (memberId, success) {
 module.exports = {
   queryTeamById,
   queryTeamByName,
+  queryTeamMember,
   addTeamMember,
   createTeam,
   removeTeamMember,

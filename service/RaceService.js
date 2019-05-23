@@ -51,10 +51,23 @@ function queryRaceByLevel(level, callback){
   })
 }
 
+
+// 查询最近的比赛信息 未测
+function queryRecentRaces(callback){
+  RaceDao.queryRecentRaces(data => {
+    if(data.length){
+      callback(Util.Write(true, data))
+    } else {
+      callback(Util.Write(false, null))
+    }
+  })
+}
+
 module.exports = {
   queryAllRace,
   queryRaceByType,
   queryRaceByLevel,
+  queryRecentRaces,
   addRace,
   alterRaceInfo
 }

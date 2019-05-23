@@ -3,6 +3,7 @@ const bodyParser = require("body-parser")
 const user = require("./routes/user")
 const race = require("./routes/race")
 const team = require("./routes/team")
+const msg = require("./routes/msg")
 const app = express()
 
 app.use(bodyParser.json())        // 解析 json
@@ -15,6 +16,7 @@ app.get("/test", (req, res) => {
 app.use('/user', user)
 app.use('/race', race)
 app.use('/team', team)
+app.use('/msg', msg)
 
 
 

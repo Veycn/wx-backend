@@ -71,12 +71,19 @@ function queryRaceByLevel(level, callback){
   DBUtil.Query(sql, params, callback)
 }
 
+function queryRecentRaces(callback){
+  let sql = ""
+  let params = []
+  DBUtil.Query(sql, params, callback)
+}
+
 module.exports = {
   queryAllRace,
   queryRaceById,
   queryRaceByName,
   queryRaceByType,
   queryRaceByLevel,
+  queryRecentRaces,
   deleteRaceById,
   alterRaceInfo,
   addRace

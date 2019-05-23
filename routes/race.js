@@ -3,7 +3,6 @@ const Race = require("../service/RaceService")
 const Util = require("../Utils")
 let router = express.Router()
 
-
 //   `id` INT NOT NULL AUTO_INCREMENT,
 //   `name` VARCHAR(60) NOT NULL,
 //   `hosts` VARCHAR(100) NULL,
@@ -26,7 +25,6 @@ router.post('/addrace', (req, res) => {
   for(let prop in race){
     raceInfo.push(race[prop])
   }
-  // console.log(arr)
   Race.addRace(raceInfo, data => {
     if(data.success){
       Util.Result(res, 200, data)
@@ -81,6 +79,17 @@ router.get('/queryallracebytype', (req, res) => {
 router.get('/queryallracebylevel', (req, res) => {
   let level = req.query.level
   Race.queryRaceByLevel(level, data => {
+    if(data.success){
+      Util.Result(res, 200, data.data)
+    } else {
+      Util.Result(res, 404, null)
+    }
+  })
+})
+
+// 获取最近的比赛 未测
+router.get('/getrecentraces', (req, res) => {
+  Race.getRecentRaces(data => {
     if(data.success){
       Util.Result(res, 200, data.data)
     } else {
