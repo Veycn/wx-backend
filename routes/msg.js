@@ -6,11 +6,11 @@ let router = express.Router()
 
 // 创建一条新的个人需求
 router.post('/createpersonalmsg', (req, res) => {
-  let {competition, requirements, userid, cando} = req.body
+  let { competition, requirements, userid, cando } = req.body
   Msg.createPersonalMsg(competition, requirements, userid, cando, data => {
-    if(data.success){
-      Util.Result(res, 200, {data: null, code: 1, msg: "OK"})
-    }else{
+    if (data.success) {
+      Util.Result(res, 200, { data: null, code: 1, msg: "OK" })
+    } else {
       Util.Result(res, 404, data)
     }
   })
@@ -22,9 +22,9 @@ router.post('/createpersonalmsg', (req, res) => {
 // 查询所有的个人需求
 router.get('/queryallpersonalmsg', (req, res) => {
   Msg.queryAllPersonalMsg(data => {
-    if(data.success){
+    if (data.success) {
       Util.Result(res, 200, data)
-    }else
+    } else
       Util.Result(res, 404, data)
   })
 })
@@ -37,17 +37,17 @@ router.get('/queryallpersonalmsg', (req, res) => {
 
 router.post('/createteammsg', (req, res) => {
   // let {teamid, requirement, advantage, leader} = req.body
-  let info = [], {teamid} = req.body
-  for(let prop in req.body){
+  let info = [], { teamid } = req.body
+  for (let prop in req.body) {
     info.push(req.body[prop])
   }
   Msg.createTeamMsg(teamid, info, data => {
-    if(data.success){
-      res.json({success: true, code: 1, msg: data.data})
+    if (data.success) {
+      res.json({ success: true, code: 1, msg: data.data })
     } else {
-      res.json({success: false, code: -1, msg: data.data})
+      res.json({ success: false, code: -1, msg: data.data })
     }
-  })
+  }) 
 })
 
 // 根据 id 删除团队需求
@@ -57,10 +57,10 @@ router.post('/createteammsg', (req, res) => {
 // 查询所有的团队需求
 router.get("/getallteammsg", (req, res) => {
   Msg.queryAllTeamRecruitMsg(data => {
-    if(data.success){
-      res.json({success: true, code: 1, data})
-    }else{
-      res.json({success: true, code: 1, data})
+    if (data.success) {
+      res.json({ success: true, code: 1, data })
+    } else {
+      res.json({ success: true, code: 1, data })
     }
   })
 })
@@ -80,9 +80,9 @@ router.get("/getallteammsg", (req, res) => {
 router.get("/queryinterstedpersoninfo", (req, res) => {
   let id = req.query.id
   Msg.queryInterestedPersonInfo(id, data => {
-    if(data.success){
+    if (data.success) {
       Util.Result(res, 200, data)
-    } else{
+    } else {
       Util.Result(res, 404, "没有查询到相关信息！")
     }
   })
@@ -94,12 +94,12 @@ router.get("/queryinterstedpersoninfo", (req, res) => {
  */
 
 router.post("/sendinvitationtoperson", (req, res) => {
-  let {userid, teamid, flag} = req.body
-  Msg.sendInvitationToPerson(userid, teamid, flag, data => {
-    if(data.success){
+  let { userid, teamid, flag, sender, reciver } = req.body
+  Msg.sendInvitationToPerson(userid, teamid, flag, sender, reciver, data => {
+    if (data.success) {
       Util.Result(res, 200, data)
-    } else{
-      Util.Result(res, 404, {success: false, data: "发送失败！"})
+    } else {
+      Util.Result(res, 404, { success: false, data: "发送失败！" })
     }
   })
 })
@@ -107,12 +107,12 @@ router.post("/sendinvitationtoperson", (req, res) => {
  * 查询所有关于我的邀请 个人
  */
 router.get('/getallmyinvitation', (req, res) => {
-  let {id, flag} = req.query
+  let { id, flag } = req.query
   Msg.queryPersonalInvitation([id, flag], data => {
-    if(data.success){
-      Util.Result(res, 200, data)
-    } else{
-      Util.Result(res, 404, data)
+    if (data.success) {
+      res.json({success: true, code: 1, data: data.data})
+    } else {
+      res.json({success: false, code: -1, data: data.data})
     }
   })
 })
@@ -122,23 +122,23 @@ router.get('/getallmyinvitation', (req, res) => {
  */
 router.post('/replayteaminvitation', (req, res) => {
   let { inviteId, type, teamid, userid } = req.body
-  if(+type){  // 同意 type = 1
+  if (+type) {  // 同意 type = 1
     Msg.ensureCanJoin(teamid, data => {
-      if(data.success && data.data.canJoin){
+      if (data.success && data.data.canJoin) {
         Team.addTeamMember(teamid, userid, data => {
-          if(data.success){
+          if (data.success) {
             console.log(data)
-            Util.Result(res, 200, {success: true, data: data.data})
-            Msg.deleteMsg(inviteId, data => {})
+            Util.Result(res, 200, { success: true, data: data.data })
+            Msg.deleteMsg(inviteId, data => { })
           }
         })
-      } else if(data.success && !data.data.canJoin){
-        Util.Result(res, 404, {success: false, data: "对不起， 你不能加入该队伍！"})
-        Msg.deleteMsg(inviteId, data => {})
+      } else if (data.success && !data.data.canJoin) {
+        Util.Result(res, 404, { success: false, data: "对不起， 你不能加入该队伍！" })
+        Msg.deleteMsg(inviteId, data => { })
       }
     })
-  }else{ // 拒绝 type = 0
-    Msg.deleteMsg(inviteId, data => {})
+  } else { // 拒绝 type = 0
+    Msg.deleteMsg(inviteId, data => { })
   }
 })
 
@@ -147,12 +147,12 @@ router.post('/replayteaminvitation', (req, res) => {
  * 向队长发送申请
  */
 router.post('/sendapplytoleader', (req, res) => {
-  let {teamid, userid, flag} = req.body
+  let { teamid, userid, flag } = req.body
   Msg.sendApplyToLeader(userid, teamid, flag, data => {
-    if(data.success){
-      res.json({success: true, code: 1, msg: data.data})
+    if (data.success) {
+      res.json({ success: true, code: 1, msg: data.data })
     } else {
-      res.json({success: false, code: -1, msg: data.data})
+      res.json({ success: false, code: -1, msg: data.data })
     }
   })
 })
@@ -160,9 +160,41 @@ router.post('/sendapplytoleader', (req, res) => {
  * 队长查询所有的关于本队伍的申请
  */
 router.get('/getallmyteamapply', (req, res) => {
-  let {teamid} = req.query
+  let { teamid } = req.query
   Msg.queryAllMyTeamApply(teamid, data => {
-    
+    if (data.success) {
+      res.json({ success: true, code: 1, data })
+    } else {
+      res.json({ success: false, code: -1, data })
+    }
   })
 })
+
+/**
+ * 队长回应加入队伍的申请 
+ *  同意： 将申请人加入队伍， 删除msg
+ *  拒绝： 删除msg
+ * */
+
+router.post('/replypersonaplly', (req, res) => {
+  let { teamid, userid, msgid, type } = req.body
+  if (+type) {  // 同意 type = 1
+    Msg.ensureCanJoin(teamid, data => {
+      if (data.success && data.data.canJoin) {
+        Team.addTeamMember(teamid, userid, data => {
+          if (data.success) {
+            Util.Result(res, 200, { success: true, data: data.data })
+            Msg.deleteMsg(msgid, data => { })
+          }
+        })
+      } else if (data.success && !data.data.canJoin) {
+        Util.Result(res, 404, { success: false, data: "对不起，你的队伍人数已满！" })
+        Msg.deleteMsg(msgid, data => { })
+      }
+    })
+  } else { // 拒绝 type = 0
+    Msg.deleteMsg(msgid, data => { })
+  }
+})
+
 module.exports = router

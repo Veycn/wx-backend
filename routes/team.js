@@ -22,7 +22,7 @@ router.post('/createteam', (req, res) => {
 // 根据 id 查询队伍信息 未测
 router.get("/queryteambyid", (req, res) => {
   let teamId = req.query.id
-  console.log(req.query)
+  console.log(req.query) 
   Team.queryTeamById(teamId, data => {
     if(data.success){
       Util.Result(res, 200, data)

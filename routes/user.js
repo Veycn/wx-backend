@@ -39,7 +39,7 @@ router.get('/getmyinfo', (req, res) => {
   })
 })
 
-// 修改个人基本信息
+// 修改个人基本信息   
 router.post('/altermybaseinfo', (req, res) => {
     let {id, ...args} = req.body
     User.alterUserBaseInfo(id, args, data => {
@@ -64,6 +64,16 @@ router.post('/setuseravatar', (req, res) => {
   })
 })
 
+// 获取个人基本信息
+router.get('/getuserbaseinfo', (req, res) => {
+  let userId = req.query.id
+  console.log(userId)
+  User.getUserBaseInfo(userId, data => {
+    if(data.success){
+      res.json({success: true, code : 1, data: data.data})
+    }
+  })
+})
 
 router.get("/test", (req, res) => {
   let result = {success: true, code: 1, msg: 'request ok'}

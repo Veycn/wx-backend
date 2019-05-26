@@ -1,4 +1,5 @@
 let UserDao = require("../dao/UserDao")
+const Util = require("../Utils")
 
 /*
   @params String account  账户
@@ -123,13 +124,27 @@ function alterUserTags(userId, tags, callback){
   })
 }
 
+function getUserBaseInfo(userId, callback){
+  UserDao.queryUserById(userId, data => {
+    console.log(data)
+    if(data.length){
+      let {name, sex, school, grade, tag, major, image} = data[0]
+      let res = {name, sex, school, grade, tag, major, image}
+      callback(Util.Write(true, res))
+    }else {
+      callback(Util.Write(false, 'Not Found!'))
+    }
+  })
+}
+
 module.exports = {
   addUser,
   login,
   getUserInfo,
   alterUserBaseInfo,
   alterUserTags,
-  setUserAvatar
+  setUserAvatar,
+  getUserBaseInfo
 }
 
 

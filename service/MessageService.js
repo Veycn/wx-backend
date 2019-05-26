@@ -15,7 +15,6 @@ function createPersonalMsg(competition, requirements, userid, cando, callback) {
 
 function queryAllPersonalMsg(callback) {
   MsgDao.getAllPersonalMsg(data => {
-    console.log(data)
     if (data.length) {
       callback(Util.Write(true, data))
     } else {
@@ -36,8 +35,8 @@ function queryInterestedPersonInfo(id, callback) {
   })
 }
 
-function sendInvitationToPerson(userid, teamid, flag, callback) {
-  MsgDao.addMessage(userid, teamid, flag, data => {
+function sendInvitationToPerson(userid, teamid, flag, sender, reciver, callback) {
+  MsgDao.addMessage(userid, teamid, flag, sender, reciver, data => {
     if (data.affectedRows) {
       callback(Util.Write(true, "ok"))
     } else {
@@ -49,43 +48,8 @@ function sendInvitationToPerson(userid, teamid, flag, callback) {
 function queryPersonalInvitation(params, callback) {
   MsgDao.queryPersonalInvitation(params, data => {
     if (data.length) {
-      let result = {}
       // 遍历每一条邀请
-      data.forEach(item => {
-        let { id, userid, teamid, flag } = item
-        // 根据 teamid 去查询队伍中所有成员包括队长的信息
-        TeamDao.queryTeamById(teamid, data => {
-          let teamInfo = {}, membersArray = []
-          let { leader, name, members, number, competition } = data[0]
-          // 替换掉中文逗号
-          let temp = members.replace(/\，/g, ",").split(",")
-          // current 记录当前队伍已有人数 (成员 + 队长)
-          let current = temp.length + 1
-          // 根据成员id拉取成员信息
-          temp.forEach(i => {
-            UserDao.queryUserById(i, data => {
-              if (data.length) {
-                let memberInfo = {}
-                let { id, school, name, major, grade, tag, competition, team } = data[0]
-                memberInfo = { id, school, name, major, grade, tag, competition, team }
-                membersArray.push(memberInfo)
-              }
-            })
-          })
-          // 成员信息收集完毕
-          teamInfo = { name, members: membersArray, current, number, competition, inviteId: id }
-          Object.assign(result, userid, flag, teamInfo)
-          UserDao.queryUserById(leader, data => {
-            let leaderInfo = {}
-            if (data.length) {
-              let { id, school, name, major, grade, tag, competition, team } = data[0]
-              leaderInfo = { id, school, name, major, grade, tag, competition, team }
-              result.leaderInfo = leaderInfo
-              callback(Util.Write(true, result))
-            }
-          })
-        })
-      })
+      callback(Util.Write(true, data))
     } else {
       callback(Util.Write(false, '没有查询到相关信息， 或者查询失败！'))
     }
@@ -169,25 +133,34 @@ function sendApplyToLeader(userid, teamid, flag, callback) {
   })
 }
 
-function queryAllMyTeamApply(teamid, callback){
+/**
+ * 队长根据本队伍的队伍id查询关于本队伍的所有申请
+ * 方便起见，查询了所有申请者的基本信息返回
+ * 队长在查看申请页面可以点击申请者的item查看
+ * @param {队伍id} teamid 
+ * @param {回调函数} callback 
+ */
+function queryAllMyTeamApply(teamid, callback) {
   MsgDao.queryAllPeronalApply(teamid, data => {
-    console.log(data)
-    if(data.length){
+    let length;
+    if (length = data.length) {
       let userArray = []
-      data.forEach(item => {
+      data.forEach((item, index) => {
         let userid = item.userid
-        UserDao.queryUserById(i, data => {
+        UserDao.queryUserById(userid, data => {
           if (data.length) {
             let userInfo = {}
             let { id, school, name, major, grade, tag, competition, team } = data[0]
             userInfo = { id, school, name, major, grade, tag, competition, team }
             userArray.push(userInfo)
+          } else {
+            callback(Util.Write(false, "Query Faild!"))
           }
+          if(index === length - 1) callback(Util.Write(true, userArray))
         })
       })
-      // callback(Util.Write(true, data))
-    } else {
-      callback(Util.Write(false, "Not Found!"))
+    }else {
+      callback(Util.Write(false, null))
     }
   })
 }

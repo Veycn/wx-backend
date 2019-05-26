@@ -20,7 +20,7 @@ function queryRaceByName(raceName, callback){
 
 // 通过id查找比赛
 function queryRaceById(raceId, callback){
-  let sql = 'select * from table race where id=?;'
+  let sql = 'select * from competition where id=?;'
   let params = [raceId]
   DBUtil.Query(sql, params, callback)
 }
@@ -72,7 +72,7 @@ function queryRaceByLevel(level, callback){
 }
 
 function queryRecentRaces(callback){
-  let sql = ""
+  let sql = "select * from competition;"
   let params = []
   DBUtil.Query(sql, params, callback)
 }

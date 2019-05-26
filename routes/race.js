@@ -89,11 +89,20 @@ router.get('/queryallracebylevel', (req, res) => {
 
 // 获取最近的比赛 未测
 router.get('/getrecentraces', (req, res) => {
-  Race.getRecentRaces(data => {
+  Race.queryRecentRaces(data => {
     if(data.success){
       Util.Result(res, 200, data.data)
     } else {
       Util.Result(res, 404, null)
+    }
+  })
+})
+
+router.get('/getraceinfobyid', (req, res) => {
+  let id = req.query.id
+  Race.queryRaceById(id, data => {
+    if(data.success){
+      res.json({success: true, code: 1, data: data.data})
     }
   })
 })

@@ -23,7 +23,7 @@ function queryTeamMember (teamid, success) {
 }
 
 function createTeam (teamInfo, callback) {
-  let sql = 'insert into team (name, members, number, leader, competition) values (?,?,?,?,?);'
+  let sql = 'insert into team (name, number, leader, competition) values (?,?,?,?);'
   let params = [...teamInfo]
   DBUtil.Query(sql, params, callback)
 }

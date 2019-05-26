@@ -72,9 +72,9 @@ function removeMsg(msgId, callback){
  * 
  * -1: 队伍成员已满
  */
-function addMessage(userid, teamid, flag, callback){
-  let sql = "insert into message (userid, teamid, flag) values (?,?,?);"
-  let params = [userid, teamid, flag]
+function addMessage(userid, teamid, flag, sender, reciver, callback){
+  let sql = "insert into message (userid, teamid, flag, sender, reciver) values (?,?,?,?,?);"
+  let params = [userid, teamid, flag, sender, reciver]
   DBUtil.Query(sql, params, callback)
 }
 
@@ -100,6 +100,7 @@ function queryAllPeronalApply(teamid, callback){
   let params = [teamid]
   DBUtil.Query(sql, params, callback)
 }
+
 module.exports = { 
   queryMsgById,
   queryPersonalInvitation,
