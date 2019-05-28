@@ -126,10 +126,9 @@ function alterUserTags(userId, tags, callback){
 
 function getUserBaseInfo(userId, callback){
   UserDao.queryUserById(userId, data => {
-    console.log(data)
     if(data.length){
-      let {name, sex, school, grade, tag, major, image} = data[0]
-      let res = {name, sex, school, grade, tag, major, image}
+      let {id, name, sex, school, grade, tag, major, image, qq} = data[0]
+      let res = {id, name, sex, school, grade, tag, major, image, qq}
       callback(Util.Write(true, res))
     }else {
       callback(Util.Write(false, 'Not Found!'))
@@ -137,8 +136,28 @@ function getUserBaseInfo(userId, callback){
   })
 }
 
+function addMyTeam (userId, teamId, callback){
+  UserDao.queryUserById(userId, data => {
+    if(data.length){
+      let { team } = data[0]
+      let temp = team == null ? `${teamId}` : `${team},${teamId}`
+      temp = temp.replace(/\，/g, ",").split(",") 
+      temp = [...new Set(temp)].join(",")
+      console.log(temp)
+      UserDao.alterTeamInfo(userId, temp, data => {
+        if(data.affectedRows){
+          callback(Util.Write({success: true, msg: '添加成功！'}))
+        }else{
+          callback(Util.Write({success: false, msg: '添加失败！'}))
+        }
+      })
+    }
+  })
+}
+
 module.exports = {
   addUser,
+  addMyTeam,
   login,
   getUserInfo,
   alterUserBaseInfo,

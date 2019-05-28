@@ -51,6 +51,13 @@ function queryRaceByType(type, callback) {
 function queryRaceByLevel(level, callback) {
   RaceDao.queryRaceByLevel(level, data => {
     if (data.length) {
+      data.forEach(item => {
+        let { signup1, signup2, time1, time2 } = item
+        item.signup1 = Util.formatTime(signup1)
+        item.signup2 = Util.formatTime(signup2)
+        item.time1 = Util.formatTime(time1)
+        item.time2 = Util.formatTime(time2)
+      })
       callback(Util.Write(true, data))
     } else {
       callback(Util.Write(false, null))
@@ -81,6 +88,23 @@ function queryRecentRaces(callback) {
 function queryRaceById(raceid, callback) {
   RaceDao.queryRaceById(raceid, data => {
     if (data.length) {
+      data.forEach(item => {
+        let { signup1, signup2, time1, time2 } = item
+        item.signup1 = Util.formatTime(signup1)
+        item.signup2 = Util.formatTime(signup2)
+        item.time1 = Util.formatTime(time1)
+        item.time2 = Util.formatTime(time2)
+      })
+      callback(Util.Write(true, data))
+    } else {
+      callback(Util.Write(false, "Query Faild! Not Found~"))
+    }
+  })
+}
+function queryLevelAndType(level, type, callback){
+  RaceDao.queryLevelAndType(level, type, data => {
+    console.log(data)
+    if (data.length) {
       let { signup1, signup2, time1, time2 } = data[0]
       data[0].signup1 = Util.formatTime(signup1)
       data[0].signup2 = Util.formatTime(signup2)
@@ -99,6 +123,7 @@ module.exports = {
   queryRaceByLevel,
   queryRecentRaces,
   queryRaceById,
+  queryLevelAndType,
   addRace,
   alterRaceInfo
 }

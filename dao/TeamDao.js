@@ -45,11 +45,17 @@ function removeTeamMember (memberId, success) {
   let params = [memberId]
   DBUtil.Query(sql, params, success)
 }
+function queryTeamByleader(leader, success){
+  let sql = "select * from team where leader = ?;"
+  let params = [leader]
+  DBUtil.Query(sql, params, success)
+}
 
 module.exports = {
   queryTeamById,
   queryTeamByName,
   queryTeamMember,
+  queryTeamByleader,
   addTeamMember,
   createTeam,
   removeTeamMember,

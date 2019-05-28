@@ -2,6 +2,7 @@ const express = require("express")
 const Msg = require("../service/MessageService")
 const Team = require("../service/TeamService")
 const Util = require("../Utils")
+const User = require("../service/UserService")
 let router = express.Router()
 
 // 创建一条新的个人需求
@@ -101,7 +102,7 @@ router.post("/sendinvitationtoperson", (req, res) => {
     } else {
       Util.Result(res, 404, { success: false, data: "发送失败！" })
     }
-  })
+  }) 
 })
 /**
  * 查询所有关于我的邀请 个人
@@ -116,7 +117,7 @@ router.get('/getallmyinvitation', (req, res) => {
     }
   })
 })
-
+ 
 /**
  * 回应队伍队长的邀请
  */
@@ -195,6 +196,33 @@ router.post('/replypersonaplly', (req, res) => {
   } else { // 拒绝 type = 0
     Msg.deleteMsg(msgid, data => { })
   }
+})
+
+router.get('/getmembersinfo', (req, res) => {
+  let members = req.query.members
+  members = members.split(',')
+  let result = []
+  for(let i = 0, len = members.length; i < len; i++){
+    User.getUserInfo(members[i], data => {
+      if(data.success){ 
+        result.push(data.data)
+      }
+      if(i == len - 1){
+        res.json({success: true, data: result})
+      }
+    })
+  }
+})
+
+router.get('/deletemsg', (req, res) => {
+  let msgId = req.query.msgId
+  Msg.deleteMsg(msgId, data => {
+    if(data.success){
+      res.json({success: true, code: 1, data: data.data})
+    }else{
+      res.json({success: false, code: -1, data: data.data})
+    }
+  })
 })
 
 module.exports = router

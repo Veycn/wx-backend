@@ -39,6 +39,18 @@ router.get('/getmyinfo', (req, res) => {
   })
 })
 
+// 获取队友的信息
+router.get('/getmemberinfo', (req, res) => {
+  let userId = req.query && req.query.id
+  User.getUserInfo(userId, data => {
+    if(data.success){
+      res.json({success: true, msg: 'Query OK!', data: data.data})
+    } else {
+      res.json({success: false, msg: '没有找到对应的用户！', data: null})
+    }
+  }) 
+})
+
 // 修改个人基本信息   
 router.post('/altermybaseinfo', (req, res) => {
     let {id, ...args} = req.body
@@ -82,6 +94,15 @@ router.get("/test", (req, res) => {
   res.end()
 })
 
-
+router.post("/addmyteam", (req, res) => {
+  let {userid, teamid} = req.body
+  User.addMyTeam(userid, teamid, data => {
+    if(data.success){
+      res.json({success: true, code: 1, data: data.msg})
+    }else{
+      res.json({success: false, code: -1, data: data.msg})
+    }
+  })
+})
 
 module.exports = router

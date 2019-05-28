@@ -66,8 +66,14 @@ function queryRaceByType(type, callback){
 }
 
 function queryRaceByLevel(level, callback){
-  let sql = `select * from competition where level like ?;`
-  let params = [`%${level}%`]
+  let sql = `select * from competition where level = ?;`
+  let params = [level]
+  DBUtil.Query(sql, params, callback)
+}
+
+function queryLevelAndType(level, type, callback){
+  let sql = `select * from competition where level = ? and keywords like ?;`
+  let params = [level, `%${type}%`]
   DBUtil.Query(sql, params, callback)
 }
 
@@ -84,6 +90,7 @@ module.exports = {
   queryRaceByType,
   queryRaceByLevel,
   queryRecentRaces,
+  queryLevelAndType,
   deleteRaceById,
   alterRaceInfo,
   addRace

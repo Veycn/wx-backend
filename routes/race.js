@@ -87,6 +87,20 @@ router.get('/queryallracebylevel', (req, res) => {
   })
 })
 
+// 已知 level 的前提下， 查询当前level下的不同type
+router.get('/querylevelandtype', (req, res) => {
+  let type = req.query.type
+  let level = req.query.level
+  Race.queryLevelAndType(level, type, data => {
+    if(data.success){
+      Util.Result(res, 200, data.data)
+    } else {
+      Util.Result(res, 404, null)
+    }
+  })
+  console.log(req.query, type, level)
+})
+
 // 获取最近的比赛 未测
 router.get('/getrecentraces', (req, res) => {
   Race.queryRecentRaces(data => {

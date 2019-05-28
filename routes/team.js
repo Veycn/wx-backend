@@ -6,15 +6,16 @@ let router = express.Router()
 // 创建一个队伍
 router.post('/createteam', (req, res) => {
   let teamInfo = req.body
+  let {leader, competition} = req.body
   let newTeamInfo = new Array()
   for(let prop in teamInfo){
     newTeamInfo.push(teamInfo[prop])
-  } 
-  Team.createTeam(newTeamInfo, data => {
+  }
+  Team.createTeam(leader, competition, newTeamInfo, data => {
     if(data.success){
-      Util.Result(res, 200, data)
+      res.json({success: true, code: 1, msg: '创建成功！' , data: data.data})
     } else {
-      Util.Result(res, 404, data)
+      res.json({success: false, code: -1, msg: '队伍已经创建！', data: data.data})      
     }
   })
 })
@@ -32,8 +33,29 @@ router.get("/queryteambyid", (req, res) => {
   })
 })
 
+// 查询我所有的队伍
 
+router.get('/queryallmyteam', (req, res) => {
+  let id = req.query.id
+  Team.queryAllMyTeam(id, data => {
+    if(data.success){
+      res.json({success: true, code: 1, data: data.data})
+    }else{
+      res.json({success: false, code: -1, data: null})
+    }
+  })
+})
 
+router.post('/addteammember', (req, res) => {
+  let { teamid, userid } = req.body
+  Team.addTeamMember(teamid, userid, data => {
+    if(data.success){
+      res.json({success: true, code: 1, data: data.data})
+    }else{
+      res.json({success: false, code: -1, data: data.data})
+    }
+  })
+})
 
 
 module.exports = router
