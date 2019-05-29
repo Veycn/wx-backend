@@ -115,7 +115,7 @@ router.get('/getallmyinvitation', (req, res) => {
     } else {
       res.json({success: false, code: -1, data: data.data})
     }
-  })
+  }) 
 })
  
 /**

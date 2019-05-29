@@ -97,7 +97,7 @@ function queryAllMyTeam(id, callback){
       for(let i = 0; i < team.length; i++){
         TeamDao.queryTeamById(team[i], data => {
           if(data.length){
-            arr.push(data[0])
+            arr.push(data[0]) 
           }
           if(i == team.length - 1){
             callback(Util.Write(true, arr))

@@ -150,11 +150,11 @@ function queryAllMyTeamApply(teamid, callback) {
         UserDao.queryUserById(userid, data => {
           if (data.length) {
             let userInfo = {}
-            let { id, school, name, major, grade, tag, competition, team } = data[0]
-            userInfo = { id, school, name, major, grade, tag, competition, team }
+            let { id, school, name, major, grade, tag, competition, team, image } = data[0]
+            userInfo = { id, school, name, major, grade, tag, competition, team, image }
             userArray.push(userInfo)
           } else {
-            callback(Util.Write(false, "Query Faild!"))
+            callback(Util.Write(false, "Query Faild!")) 
           }
           if(index === length - 1) callback(Util.Write(true, userArray))
         })
