@@ -13,13 +13,17 @@ function createConnection () {
 function Query (sql, params, success){
   const connection = createConnection()
   connection.connect()
-  connection.query(sql, params, (err, res) => {
-    if(!err){
-      success(res)
-    } else {
-      throw new Error('Query Error! ' + err)
-    }
-  })
+  try{
+    connection.query(sql, params, (err, res) => {
+      if(!err){
+        success(res)
+      } else {
+        throw new Error('Query Error! ' + err)
+      }
+    })
+  }catch(e){
+    console.log("查询出错：" + e)
+  }
   connection.end()
 }
 

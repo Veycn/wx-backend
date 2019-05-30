@@ -21,6 +21,9 @@ app.use('/msg', msg)
 
 
 const port = process.env.PORT | 9009
+process.on('uncaughtException', function (err) { 
+  console.log('捕获到异常: ' + err); 
+});
 app.listen(port, () => {
   console.log(`server is runing at ${port}`)
 })
